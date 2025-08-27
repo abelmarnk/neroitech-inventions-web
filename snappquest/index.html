@@ -978,16 +978,17 @@
                     </div>
                     <div class="quest-option">
                         <label>
-                            <input type="checkbox" name="questType" value="followers"> Z Followers
+                            <input type="checkbox" name="questType" value="followers"> X Followers
                         </label>
                         <input type="number" name="followersQuantity" placeholder="Quantity" min="0" disabled>
                     </div>
+                    <!--
                     <div class="quest-option">
                         <label>
                             <input type="checkbox" name="questType" value="engagement"> Engagement Quest
                         </label>
                         <input type="number" name="engagementQuantity" placeholder="Quantity" min="0" disabled>
-                    </div>
+                    </div>-->
                     <div class="price-calculation">
                         <h3>Total Price: ₦<span id="totalPrice">0</span></h3>
                     </div>
@@ -1179,7 +1180,7 @@ SnappQuest: New Quest Created
 ${questData.likesQuantity ? `X Likes: ${questData.likesQuantity}` : ''}
 ${questData.retweetsQuantity ? `X RTs: ${questData.retweetsQuantity}` : ''}
 ${questData.commentsQuantity ? `X Comments: ${questData.commentsQuantity}` : ''}
-${questData.followersQuantity ? `Z Followers: ${questData.followersQuantity}` : ''}
+${questData.followersQuantity ? `X Followers: ${questData.followersQuantity}` : ''}
 ${questData.engagementQuantity ? `Engagement Quest: ${questData.engagementQuantity}` : ''}
 ------------------------------
 Total Engagements: ${totalEngagements}
