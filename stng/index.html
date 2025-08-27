@@ -179,32 +179,183 @@
         .day-mode .volume-table tbody tr:last-child {
             color: #374151;
         }
+        /* New Styles for Modern Header */
+        .gradient-text {
+            background: linear-gradient(90deg, #facc15, #16a34a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fadeInDown {
+            animation: fadeInDown 1s ease-out forwards;
+        }
+        .animation-delay-200 {
+            animation-delay: 0.2s;
+        }
+        .animation-delay-400 {
+            animation-delay: 0.4s;
+        }
+        .header-nav-link {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .header-nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #facc15;
+            transition: width 0.3s ease;
+        }
+        .header-nav-link:hover:after {
+            width: 100%;
+        }
+        .header-nav-link:hover {
+            color: #facc15;
+            transform: translateY(-2px);
+        }
+        /* Hamburger Menu Styles */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 2rem;
+            height: 2rem;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 30;
+        }
+        .hamburger span {
+            width: 2rem;
+            height: 0.25rem;
+            background: #ffffff;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(0.5rem, 0.5rem);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(0.5rem, -0.5rem);
+        }
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 75%;
+            height: 100%;
+            background: rgba(22, 163, 74, 0.95);
+            backdrop-filter: blur(10px);
+            transition: right 0.3s ease;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .mobile-nav.active {
+            right: 0;
+        }
+        .mobile-nav a {
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 1rem;
+            text-align: center;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        .mobile-nav a:hover {
+            background: rgba(250, 204, 21, 0.2);
+            color: #facc15;
+        }
+        .day-mode .mobile-nav {
+            background: rgba(243, 244, 246, 0.95);
+            color: #1f2937;
+        }
+        .day-mode .mobile-nav a {
+            color: #1f2937;
+        }
+        .day-mode .mobile-nav a:hover {
+            background: rgba(22, 163, 74, 0.2);
+            color: #15803d;
+        }
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+        }
+        @media (min-width: 769px) {
+            .mobile-nav {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-100">
-    <header class="bg-gradient-to-r from-green-600 to-green-800 text-white text-center py-12">
-        <div class="flex justify-end max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <button id="themeToggle" class="toggle-button text-gray-900 font-semibold py-2 px-4 rounded-lg shadow-lg">
-                <span class="toggle-icon">🌙</span> Night Mode
+    <header class="relative bg-gradient-to-r from-green-600 to-green-800 text-white text-center py-16 overflow-hidden shadow-lg">
+        <div class="absolute inset-0 opacity-10" style="background-image: url('https://www.transparenttextures.com/patterns/asfalt-light.png');"></div>
+        <div class="flex justify-end items-center max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+            <div class="hidden md:flex items-center space-x-8 mr-4">
+                <a href="#overview" class="header-nav-link text-white font-medium">Overview</a>
+                <a href="#startups" class="header-nav-link text-white font-medium">Startups</a>
+                <a href="#total-volume" class="header-nav-link text-white font-medium">Total Volume</a>
+                <a href="#insights" class="header-nav-link text-white font-medium">Insights</a>
+                <button class="themeToggle toggle-button text-gray-900 font-semibold py-2 px-4 rounded-lg shadow-lg">
+                    <span class="toggle-icon">🌙</span> Night Mode
+                </button>
+            </div>
+            <button class="hamburger md:hidden" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
             </button>
         </div>
-        <h1 class="text-4xl md:text-5xl font-bold mt-4">State of Nigerian Solana Startups</h1>
-        <p class="mt-4 text-lg md:text-xl max-w-2xl mx-auto">Tracking the growth of Nigeria’s Web3 ecosystem on Solana in 2025</p>
-        <a href="https://neroitech-inventions.medium.com/nigerian-solana-startups-cracking-product-market-fit-in-harsh-markets-7f875f7b4881" target="_blank" class="mt-6 inline-block submit-button text-gray-900 font-semibold py-3 px-6 rounded-lg shadow-lg">Read the Latest Report</a>
+        <nav class="mobile-nav" id="mobileNav">
+            <button class="themeToggle toggle-button text-gray-900 font-semibold py-2 px-4 rounded-lg shadow-lg mb-8">
+                <span class="toggle-icon">🌙</span> Night Mode
+            </button>
+            <a href="#overview" class="header-nav-link">Overview</a>
+            <a href="#startups" class="header-nav-link">Startups</a>
+            <a href="#total-volume" class="header-nav-link">Total Volume</a>
+            <a href="#insights" class="header-nav-link">Insights</a>
+        </nav>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-5xl md:text-6xl font-extrabold gradient-text animate-fadeInDown">State of Nigerian Solana Startups</h1>
+            <p class="mt-6 text-xl md:text-2xl max-w-3xl mx-auto text-gray-200 animate-fadeInDown animation-delay-200">Tracking the growth of Nigeria’s Web3 ecosystem on Solana in 2025</p>
+            <a href="https://neroitech-inventions.medium.com/nigerian-solana-startups-cracking-product-market-fit-in-harsh-markets-7f875f7b4881" target="_blank" class="mt-8 inline-block submit-button text-gray-900 font-semibold py-3 px-8 rounded-full shadow-xl animate-fadeInDown animation-delay-400">Read the Latest Report</a>
+        </div>
     </header>
 
     <main class="max-w-6xl mx-auto my-12 px-4 sm:px-6 lg:px-8">
-        <section class="mb-12 glassmorphism p-6 rounded-xl">
+        <section id="overview" class="mb-12 glassmorphism p-6 rounded-xl">
             <h2 class="text-3xl font-semibold text-green-300 mb-6">Overview</h2>
             <p class="text-gray-300 leading-relaxed">
                 Nigerian Solana startups are transforming finance by leveraging Solana’s high-throughput, low-cost blockchain to address challenges like currency devaluation and unreliable banking. Supported by Superteam Nigeria, these projects showcase strong product-market fit in a tough market. Below, explore the transaction volumes of <a href="https://app.nectarfi.finance/" target="_blank" class="text-yellow-400 underline"><b>NectarFi</b></a>, <a href="https://www.ribhfinance.com/" target="_blank" class="text-yellow-400 underline"><b>Ribh</b></a>, <a href="https://paj.cash/" target="_blank" class="text-yellow-400 underline"><b>PAJ CASH</b></a>, and <a href="https://getcryptonia.com/" target="_blank" class="text-yellow-400 underline"><b>Cryptonia</b></a>, totaling over <strong>$16.8 million</strong> in 2025. Are you a Solana startup in Nigeria? <a href="https://forms.gle/Lk14Bgv8o5V1u72W8" target="_blank" class="text-yellow-400 underline">Submit your data</a> to be featured!
             </p>
         </section>
 
-        <section class="mb-12">
+        <section id="startups" class="mb-12">
             <h2 class="text-3xl font-semibold text-green-300 mb-6">Transaction Volumes by Startup</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="startup-list">
-                <!-- NectarFi -->
                 <div class="bg-gray-800 p-6 rounded-xl shadow-lg transition-all duration-300">
                     <h3 class="text-2xl font-medium text-green-300">NectarFi</h3>
                     <p class="text-gray-400 mt-2">A savings platform offering flexible stablecoin deposits with no lockups.</p>
@@ -238,7 +389,6 @@
                         <canvas id="nectarFiChart"></canvas>
                     </div>
                 </div>
-                <!-- Ribh -->
                 <div class="bg-gray-800 p-6 rounded-xl shadow-lg transition-all duration-300">
                     <h3 class="text-2xl font-medium text-green-300">Ribh</h3>
                     <p class="text-gray-400 mt-2">A payment rail for low-cost, real-time cross-border transactions.</p>
@@ -272,7 +422,6 @@
                         <canvas id="ribhChart"></canvas>
                     </div>
                 </div>
-                <!-- PAJ CASH -->
                 <div class="bg-gray-800 p-6 rounded-xl shadow-lg transition-all duration-300">
                     <h3 class="text-2xl font-medium text-green-300">PAJ CASH</h3>
                     <p class="text-gray-400 mt-2">Simplifies crypto-to-fiat conversions with a non-custodial model.</p>
@@ -306,7 +455,6 @@
                         <canvas id="pajCashChart"></canvas>
                     </div>
                 </div>
-                <!-- Cryptonia -->
                 <div class="bg-gray-800 p-6 rounded-xl shadow-lg transition-all duration-300">
                     <h3 class="text-2xl font-medium text-green-300">Cryptonia</h3>
                     <p class="text-gray-400 mt-2">Facilitates stablecoin-to-Naira conversions in under 10 seconds.</p>
@@ -339,7 +487,7 @@
             </div>
         </section>
 
-        <section class="mb-12 glassmorphism p-6 rounded-xl">
+        <section id="total-volume" class="mb-12 glassmorphism p-6 rounded-xl">
             <h2 class="text-3xl font-semibold text-green-300 mb-6">Total Transaction Volume</h2>
             <p class="text-gray-300 mb-6">
                 The combined transaction volume of these Nigerian Solana startups as of August 2025 is <strong>$16,800,000</strong>, reflecting significant growth and adoption in Nigeria’s challenging market environment. Contribute to this growing ecosystem by <a href="https://forms.gle/Lk14Bgv8o5V1u72W8" target="_blank" class="text-yellow-400 underline">submitting your startup’s data</a>.
@@ -349,19 +497,31 @@
             </div>
         </section>
 
-        <section class="glassmorphism p-6 rounded-xl">
+        <section id="insights" class="glassmorphism p-6 rounded-xl">
             <h2 class="text-3xl font-semibold text-green-300 mb-6">Key Insights</h2>
-            <ul class="list-disc list-inside text-gray-300 space-y-2">
-                <li><strong>NectarFi</strong> achieved a 900% increase in transaction volume from June to August 2025, driven by its user-friendly savings platform.</li>
-                <li><strong>Ribh</strong> processed $10.5M in cross-border payments, addressing liquidity gaps for SMEs with zero marketing spend.</li>
-                <li><strong>PAJ CASH</strong> saw a 275% increase in transaction volume, focusing on seamless crypto-to-fiat conversions.</li>
-                <li><strong>Cryptonia</strong> grew from $5M in October 2024 to $6M in July 2025, a 20% increase, showcasing rapid adoption for stablecoin-to-Naira transactions.</li>
-                <li>These startups leverage Solana’s low-cost, high-throughput infrastructure to solve real-world financial pain points in Nigeria.</li>
-                <li>Join the ecosystem! Submit your project data to be featured in future updates.</li>
-            </ul>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-gray-800 p-4 rounded-lg shadow-md transition-all duration-300 hover:bg-gray-700 hover:shadow-lg">
+                    <h3 class="text-lg font-medium text-yellow-400">NectarFi</h3>
+                    <p class="text-gray-300 text-sm mt-2">Achieved a <span class="font-bold text-green-300">900% increase</span> in transaction volume from June to August 2025, driven by its intuitive, user-friendly savings platform.</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg shadow-md transition-all duration-300 hover:bg-gray-700 hover:shadow-lg">
+                    <h3 class="text-lg font-medium text-yellow-400">Ribh</h3>
+                    <p class="text-gray-300 text-sm mt-2">Processed <span class="font-bold text-green-300">$10.5M</span> in cross-border payments, addressing liquidity gaps for SMEs with <span class="font-bold">zero marketing spend</span>.</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg shadow-md transition-all duration-300 hover:bg-gray-700 hover:shadow-lg">
+                    <h3 class="text-lg font-medium text-yellow-400">PAJ CASH</h3>
+                    <p class="text-gray-300 text-sm mt-2">Experienced a <span class="font-bold text-green-300">275% increase</span> in transaction volume, focusing on seamless crypto-to-fiat conversions.</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg shadow-md transition-all duration-300 hover:bg-gray-700 hover:shadow-lg">
+                    <h3 class="text-lg font-medium text-yellow-400">Cryptonia</h3>
+                    <p class="text-gray-300 text-sm mt-2">Grew from <span class="font-bold text-green-300">$5M</span> in October 2024 to <span class="font-bold text-green-300">$6M</span> in July 2025, a <span class="font-bold">20% increase</span>, showcasing rapid adoption for stablecoin-to-Naira transactions.</p>
+                </div>
+            </div>
+            <p class="text-gray-300 text-sm mb-6">These startups leverage Solana’s <span class="font-bold text-green-300">low-cost, high-throughput</span> infrastructure to address critical financial challenges in Nigeria, delivering innovative solutions with real-world impact.</p>
+            <p class="text-gray-300 text-sm mb-6">Join the ecosystem! <a href="https://forms.gle/Lk14Bgv8o5V1u72W8" target="_blank" class="text-yellow-400 underline hover:text-yellow-300">Submit your project data</a> to be featured in future updates.</p>
             <div class="mt-6 flex flex-col sm:flex-row gap-4">
                 <a href="https://neroitech-inventions.medium.com/nigerian-solana-startups-cracking-product-market-fit-in-harsh-markets-7f875f7b4881" target="_blank" class="report-button text-gray-900 font-semibold py-3 px-6 rounded-lg shadow-lg text-center">Read the Latest Report</a>
-                <a href="https://forms.gle/Lk14Bgv8o5V1u72W8" target="_blank" class="submit-button text-gray-900 font-semibold py-3 px-6 rounded-lg shadow-lg text-center">Submit Your Data</a>
+                <a href="https://drive.google.com/drive/folders/1JH34JbqrUhpz_fh-2yzR26-GDO-t_Myr?usp=sharing" target="_blank" class="submit-button text-gray-900 font-semibold py-3 px-6 rounded-lg shadow-lg text-center">Download the Charts</a>
             </div>
         </section>
     </main>
@@ -408,14 +568,45 @@
 
     <script>
         // Theme Toggle Functionality
-        const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('day-mode');
-            themeToggle.innerHTML = body.classList.contains('day-mode') 
-                ? '<span class="toggle-icon">☀️</span> Day Mode' 
-                : '<span class="toggle-icon">🌙</span> Night Mode';
-            updateCharts();
+        const themeToggles = document.querySelectorAll('.themeToggle');
+        themeToggles.forEach(btn => {
+            btn.addEventListener('click', () => {
+                body.classList.toggle('day-mode');
+                const isDayMode = body.classList.contains('day-mode');
+                themeToggles.forEach(b => {
+                    b.innerHTML = isDayMode 
+                        ? '<span class="toggle-icon">☀️</span> Day Mode' 
+                        : '<span class="toggle-icon">🌙</span> Night Mode';
+                });
+                updateCharts();
+            });
+        });
+
+        // Hamburger Menu Functionality
+        const hamburger = document.getElementById('hamburger');
+        const mobileNav = document.getElementById('mobileNav');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileNav.classList.toggle('active');
+        });
+
+        // Close mobile nav when a link is clicked
+        mobileNav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileNav.classList.remove('active');
+            });
+        });
+
+        // Smooth Scroll for Anchor Links
+        document.querySelectorAll('.header-nav-link').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+            });
         });
 
         // Back to Top Functionality
