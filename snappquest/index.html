@@ -495,12 +495,12 @@
             font-size: 24px;
         }
 
-        /* Footer */
+        /* Footer Updates */
         footer {
             background: linear-gradient(135deg, #1F2937, #111827);
             color: #E5E7EB;
             padding: 64px 24px;
-            text-align: center;
+            text-align: left; /* Align left for columns */
             position: relative;
             overflow: hidden;
         }
@@ -517,60 +517,114 @@
             z-index: 0;
         }
 
-        footer p {
-            font-size: 16px;
-            margin-bottom: 24px;
-            opacity: 0.9;
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
             position: relative;
             z-index: 1;
         }
 
-        footer .footer-links {
+        .footer-row {
             display: flex;
-            justify-content: center;
-            gap: 24px;
             flex-wrap: wrap;
-            margin-top: 24px;
-            position: relative;
-            z-index: 1;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            gap: 24px; /* Added for better spacing */
         }
 
-        footer .footer-links a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .footer-col {
+            flex: 1 1 200px;
+            margin: 0;
+        }
+
+        .footer-col h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+
+        .footer-col p {
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 16px; /* Improved spacing */
+        }
+
+        .footer-link {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-link li {
+            margin-bottom: 12px;
+        }
+
+        .footer-link a {
             color: #34D399;
             text-decoration: none;
             font-weight: 500;
             font-size: 16px;
-            padding: 12px 20px;
-            border-radius: 12px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-link a:hover {
+            color: #ffffff;
+            transform: translateX(4px);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .copyright-text p {
+            font-size: 14px;
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .social-icons ul {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            gap: 24px;
+        }
+
+        .social-icons a {
+            color: #34D399;
+            font-size: 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             transition: all 0.3s ease;
         }
 
-        footer .footer-links a i {
-            font-size: 20px;
-            transition: transform 0.3s ease;
-        }
-
-        footer .footer-links a:hover {
-            background: rgba(52, 211, 153, 0.1);
+        .social-icons a:hover {
             color: #ffffff;
-            transform: translateY(-3px);
-        }
-
-        footer .footer-links a:hover i {
-            transform: scale(1.2);
         }
 
         @media (max-width: 768px) {
-            footer .footer-links a {
-                font-size: 14px;
-                padding: 10px 16px;
+            .footer-row {
+                flex-direction: column;
+                gap: 32px;
             }
-
-            footer .footer-links a i {
-                font-size: 18px;
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+            .social-icons ul {
+                justify-content: center;
             }
         }
 
@@ -845,7 +899,7 @@
         </div>
         <nav class="nav-links">
             <a href="#create-quest">Create Quest</a>
-            <a href="https://t.me/SnappQuest/129" target="_blank">Join Quest</a>
+            <a href="https://t.me/SnappQuest/134" target="_blank">Join Quest</a>
         </nav>
         <div class="hamburger">
             <i class="fas fa-bars"></i>
@@ -865,7 +919,7 @@
                     <i class="fas fa-plus-circle"></i>
                     <span>Create Quest</span>
                 </a>
-                <a href="https://t.me/SnappQuest/129" class="action-icon" target="_blank">
+                <a href="https://t.me/SnappQuest/134" class="action-icon" target="_blank">
                     <i class="fas fa-users"></i>
                     <span>Join Quest</span>
                 </a>
@@ -890,17 +944,54 @@
             <div class="step">
                 <div class="step-icon"><i class="fas fa-trophy"></i></div>
                 <h3>Earn Rewards</h3>
-                <p>Earn rewards and track your progress on the <a href="https://keepthescore.com/board/ffftzzhdprgyr/?public=true" target="_blank">leaderboard</a></p>
+                <p>You earn rewards for completing active quests on time</p>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2025 SnappQuest. All rights reserved.</p>
-        <div class="footer-links">
-            <a href="https://x.com/SnappQuest" target="_blank"><i class="fab fa-twitter"></i> Follow us on X</a>
-            <a href="#" id="learn-more-link"><i class="fas fa-info-circle"></i> Find More Info</a>
+        <div class="footer-container">
+            <div class="footer-row">
+                <div class="footer-col footer-info">
+                    <h2>SnappQuest</h2>
+                    <p>SnappQuest is building the Engage-to-Earn layer for Solana, where every community action matters.</p>
+                </div>
+
+                <div class="footer-col">
+                    <h2>Quick Links</h2>
+                    <ul class="footer-link">
+                        <li><a href="#hero">Home</a></li>
+                        <li><a href="#create-quest">Create Quest</a></li>
+                        <li><a href="https://t.me/SnappQuest/134" target="_blank">Join Quest</a></li>
+                        <li><a href="#" id="learn-more-link">How It Works</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h2>Other Tools</h2>
+                    <ul class="footer-link">
+                        <li><a href="#" id="https://t.me/SnappQuest"><i class="fas fa-tasks"></i>Earnly Bot</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h2>Custom Quest</h2>
+                    <p>Reach out for partnerships or customized quests on Telegram.</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="copyright-text">
+                    <p>&copy; 2025 SnappQuest. All rights reserved.</p>
+                </div>
+                <div class="social-icons">
+                    <ul>
+                        <li><a href="https://x.com/SnappQuest" target="_blank"><i class="fab fa-twitter"></i> X (Twitter)</a></li>
+                        <li><a href="https://t.me/SnappQuest" target="_blank"><i class="fab fa-telegram"></i> Telegram</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </footer>
 
@@ -927,7 +1018,7 @@
                 <p>New projects and the Solana community struggle to gain visibility, while communities show up but often don't get rewarded.</p>
 
                 <h3>The Solution: SnappQuest</h3>
-                <p>SnappQuest is a platform that incentivizes participation, turning effort into recognition, rewards, and earning opportunities.</p>
+                <p>SnappQuest is a tool that incentivizes participation, turning effort into recognition, rewards, and earning opportunities.</p>
 
                 <h3>How SnappQuest Works</h3>
                 <p>Create your Quest, generate the Quote, and share the new Quest with the SnappQuest community. Admins track Quests and reward community participation.</p>
