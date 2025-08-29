@@ -838,6 +838,76 @@
             color: #111827;
         }
 
+        /* Currency Switch Styles */
+        .currency-switch {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .currency-switch span {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1F2937;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input:checked + .slider {
+            background: linear-gradient(135deg, #6366F1, #34D399);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Buttons Container */
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
         @media (max-width: 768px) {
             .modal-content {
                 width: 90%;
@@ -883,6 +953,10 @@
 
             #copyConfirmationModal .modal-body p {
                 font-size: 16px;
+            }
+
+            .buttons-container {
+                flex-direction: column;
             }
         }
     </style>
@@ -971,7 +1045,7 @@
                 <div class="footer-col">
                     <h2>Other Tools</h2>
                     <ul class="footer-link">
-                        <li><a href="#" id="https://t.me/SnappQuest"><i class="fas fa-tasks"></i>Earnly Bot</a></li>
+                        <li><a href="https://t.me/EarnlyQuestBot" target="_blank"><i class="fas fa-tasks"></i>Earnly Bot</a></li>
                     </ul>
                 </div>
 
@@ -1047,7 +1121,15 @@
             </div>
             <div class="modal-body">
                 <h3>Quest Options</h3>
-                <p>Select the engagement types and quantities for your quest. Minimum price is ₦20 per engagement.</p>
+                <p>Select the engagement types and quantities for your quest. Minimum price is <span id="minPriceText">₦20</span> per engagement.</p>
+                <div class="currency-switch">
+                    <span>NGN</span>
+                    <label class="switch">
+                        <input type="checkbox" id="currencyToggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span>USDC</span>
+                </div>
                 <form id="createQuestForm">
                     <div class="quest-option">
                         <label>
@@ -1081,9 +1163,12 @@
                         <input type="number" name="engagementQuantity" placeholder="Quantity" min="0" disabled>
                     </div>-->
                     <div class="price-calculation">
-                        <h3>Total Price: ₦<span id="totalPrice">0</span></h3>
+                        <h3>Total Price: <span id="totalPrice">₦0</span></h3>
                     </div>
-                    <button type="submit" class="modal-close-btn">Create Quest</button>
+                    <div class="buttons-container">
+                        <button type="submit" class="modal-close-btn">Create Quest</button>
+                        <button type="button" class="modal-close-btn" id="customQuestBtn" onclick="window.open('https://t.me/SnappQuest/146', '_blank');">Custom Quest</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -1117,7 +1202,6 @@
         const learnMoreClose = learnMoreModal.querySelector(".close");
         const learnMoreCloseBtn = learnMoreModal.querySelector(".modal-close-btn");
         const createQuestClose = createQuestModal.querySelector(".close");
-        const createQuestCloseBtn = createQuestModal.querySelector(".modal-close-btn");
         const copyConfirmationClose = copyConfirmationModal.querySelector(".close");
         const copyConfirmationCloseBtn = copyConfirmationModal.querySelector(".modal-close-btn");
 
@@ -1133,6 +1217,14 @@
         const createQuestForm = document.getElementById("createQuestForm");
         const checkboxes = createQuestForm.querySelectorAll('input[name="questType"]');
         const totalPriceSpan = document.getElementById("totalPrice");
+        const minPriceText = document.getElementById("minPriceText");
+        const currencyToggle = document.getElementById("currencyToggle");
+        const customQuestBtn = document.getElementById("customQuestBtn");
+
+        // Currency variables
+        let currency = 'NGN';
+        let pricePerEngagement = 20;
+        let currencySymbol = '₦';
 
         // Toggle hamburger menu
         hamburger.addEventListener("click", () => {
@@ -1190,11 +1282,6 @@
             setTimeout(() => createQuestModal.style.display = "none", 400);
         };
 
-        createQuestCloseBtn.onclick = function () {
-            createQuestModal.classList.remove("active");
-            setTimeout(() => createQuestModal.style.display = "none", 400);
-        };
-
         // Close Copy Confirmation modal
         copyConfirmationClose.onclick = function () {
             copyConfirmationModal.classList.remove("active");
@@ -1234,16 +1321,34 @@
             });
         });
 
+        // Currency toggle listener
+        currencyToggle.addEventListener("change", () => {
+            if (currencyToggle.checked) {
+                currency = 'USDC';
+                pricePerEngagement = 0.2;
+                currencySymbol = '';
+                minPriceText.textContent = '0.2 USDC';
+            } else {
+                currency = 'NGN';
+                pricePerEngagement = 20;
+                currencySymbol = '₦';
+                minPriceText.textContent = '₦20';
+            }
+            calculateTotalPrice();
+        });
+
         // Calculate total price
         function calculateTotalPrice() {
-            let total = 0;
+            let totalEngagements = 0;
             const inputs = createQuestForm.querySelectorAll('input[type="number"]');
             inputs.forEach(input => {
-                const value = parseInt(input.value) || 0;
-                total += value * 20; // ₦20 per engagement
+                const value = parseFloat(input.value) || 0;
+                totalEngagements += value;
             });
-            totalPriceSpan.textContent = total;
-            return total;
+            const totalPrice = totalEngagements * pricePerEngagement;
+            const formattedPrice = currency === 'USDC' ? `${totalPrice.toFixed(2)} USDC` : `₦${totalPrice}`;
+            totalPriceSpan.textContent = formattedPrice;
+            return { totalPrice, totalEngagements };
         }
 
         // Update total price on quantity input change
@@ -1256,13 +1361,12 @@
             e.preventDefault();
             const formData = new FormData(createQuestForm);
             const questData = {};
-            let totalEngagements = 0;
             formData.forEach((value, key) => {
                 questData[key] = value;
-                if (key.includes("Quantity")) {
-                    totalEngagements += parseInt(value) || 0;
-                }
             });
+
+            const { totalEngagements, totalPrice } = calculateTotalPrice();
+            const formattedTotalPrice = currency === 'USDC' ? `${totalPrice.toFixed(2)} USDC` : `₦${totalPrice}`;
 
             // Format quest details for clipboard
             const questDetails = `
@@ -1275,7 +1379,7 @@ ${questData.followersQuantity ? `X Followers: ${questData.followersQuantity}` : 
 ${questData.engagementQuantity ? `Engagement Quest: ${questData.engagementQuantity}` : ''}
 ------------------------------
 Total Engagements: ${totalEngagements}
-Total Price: ₦${calculateTotalPrice()}
+Total Price: ${formattedTotalPrice}
 ------------------------------
 Created on: ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos' })}
             `.trim();
@@ -1298,6 +1402,13 @@ Created on: ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos' })}
             window.open("https://t.me/SnappQuest/129", "_blank");
 
             // Close the create quest modal
+            createQuestModal.classList.remove("active");
+            setTimeout(() => createQuestModal.style.display = "none", 400);
+        });
+
+        // Custom Quest button handler
+        customQuestBtn.addEventListener("click", () => {
+            window.open("https://t.me/SnappQuest", "_blank");
             createQuestModal.classList.remove("active");
             setTimeout(() => createQuestModal.style.display = "none", 400);
         });
