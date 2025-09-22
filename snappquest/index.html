@@ -47,6 +47,12 @@
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
 
+        .nav-container {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
         .nav-links {
             display: flex;
             gap: 24px;
@@ -88,6 +94,28 @@
             transform: scale(0.95);
         }
 
+        .connect-btn {
+            background: linear-gradient(135deg, #6366F1, #34D399);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .connect-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .connect-btn:active {
+            transform: scale(0.95);
+        }
+
         .hamburger {
             display: none;
             font-size: 24px;
@@ -103,7 +131,7 @@
 
         /* Mobile Menu Styles */
         @media (max-width: 768px) {
-            .nav-links {
+            .nav-container {
                 display: none;
                 flex-direction: column;
                 position: fixed;
@@ -119,9 +147,14 @@
                 box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
             }
 
-            .nav-links.active {
+            .nav-container.active {
                 display: flex;
                 transform: translateX(0);
+            }
+
+            .nav-links {
+                flex-direction: column;
+                width: 100%;
             }
 
             .nav-links a {
@@ -138,6 +171,13 @@
             .nav-links a:hover {
                 background: rgba(255, 255, 255, 0.1);
                 transform: translateX(4px);
+            }
+
+            .connect-btn {
+                margin-top: 24px;
+                width: 100%;
+                padding: 16px;
+                font-size: 18px;
             }
 
             .hamburger {
@@ -971,10 +1011,13 @@
         <div class="logo">
             <img src="images/logo.png" alt="SnappQuest Logo">
         </div>
-        <nav class="nav-links">
-            <a href="#create-quest">Create Quest</a>
-            <a href="https://t.me/SnappQuest/134" target="_blank">Join Quest</a>
-        </nav>
+        <div class="nav-container">
+            <nav class="nav-links">
+                <a href="#create-quest">Create Quest</a>
+                <a href="https://t.me/SnappQuest/134" target="_blank">Join Quest</a>
+            </nav>
+            <button class="connect-btn">Connect Wallet</button>
+        </div>
         <div class="hamburger">
             <i class="fas fa-bars"></i>
         </div>
@@ -1208,7 +1251,7 @@
 
         // Get hamburger menu elements
         const hamburger = document.querySelector(".hamburger");
-        const navLinks = document.querySelector(".nav-links");
+        const navContainer = document.querySelector(".nav-container");
         const overlay = document.querySelector(".overlay");
 
         // Get back to top button
@@ -1230,15 +1273,15 @@
         // Toggle hamburger menu
         hamburger.addEventListener("click", () => {
             hamburger.classList.toggle("active");
-            navLinks.classList.toggle("active");
+            navContainer.classList.toggle("active");
             overlay.classList.toggle("active");
         });
 
         // Close hamburger menu when a link is clicked
-        navLinks.querySelectorAll("a").forEach(link => {
+        navContainer.querySelectorAll("a").forEach(link => {
             link.addEventListener("click", () => {
                 hamburger.classList.remove("active");
-                navLinks.classList.remove("active");
+                navContainer.classList.remove("active");
                 overlay.classList.remove("active");
             });
         });
@@ -1246,7 +1289,7 @@
         // Close hamburger menu when overlay is clicked
         overlay.addEventListener("click", () => {
             hamburger.classList.remove("active");
-            navLinks.classList.remove("active");
+            navContainer.classList.remove("active");
             overlay.classList.remove("active");
         });
 
@@ -1428,6 +1471,13 @@ Created on: ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos' })}
                 top: 0,
                 behavior: "smooth"
             });
+        });
+
+        // Connect button handler (placeholder for wallet connection logic)
+        const connectBtn = document.querySelector(".connect-btn");
+        connectBtn.addEventListener("click", () => {
+            // Add your wallet connection logic here, e.g., using Solana Web3.js or similar
+            alert("Wallet connection functionality to be implemented.");
         });
     </script>
 </body>
