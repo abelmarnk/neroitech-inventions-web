@@ -1016,7 +1016,7 @@
                 <a href="#create-quest">Create Quest</a>
                 <a href="https://t.me/SnappQuest/134" target="_blank">Join Quest</a>
             </nav>
-            <button class="connect-btn">Connect Wallet</button>
+            <button class="connect-btn" onclick="window.location.href='profile.html'">Connect Wallet</button>
         </div>
         <div class="hamburger">
             <i class="fas fa-bars"></i>
@@ -1471,13 +1471,6 @@ Created on: ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos' })}
                 top: 0,
                 behavior: "smooth"
             });
-        });
-
-        // Connect button handler (placeholder for wallet connection logic)
-        const connectBtn = document.querySelector(".connect-btn");
-        connectBtn.addEventListener("click", () => {
-            // Add your wallet connection logic here, e.g., using Solana Web3.js or similar
-            alert("Wallet connection functionality to be implemented.");
         });
     </script>
 </body>
