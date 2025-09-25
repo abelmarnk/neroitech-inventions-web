@@ -1,7 +1,7 @@
 "use client";
-import { BaseModal } from './BaseModal';
-import { motion } from 'framer-motion';
-import { FaRegCopy } from 'react-icons/fa';
+import { BaseModal } from "./BaseModal";
+import { motion } from "framer-motion";
+import { FaRegCopy } from "react-icons/fa";
 
 interface CopyConfirmationModalProps {
   open: boolean;
@@ -9,7 +9,11 @@ interface CopyConfirmationModalProps {
   copiedText?: string;
 }
 
-export const CopyConfirmationModal: React.FC<CopyConfirmationModalProps> = ({ open, onClose, copiedText }) => {
+export const CopyConfirmationModal: React.FC<CopyConfirmationModalProps> = ({
+  open,
+  onClose,
+  copiedText,
+}) => {
   return (
     <BaseModal open={open} onClose={onClose} title="Copied to Clipboard">
       <div className="space-y-6">
@@ -21,14 +25,20 @@ export const CopyConfirmationModal: React.FC<CopyConfirmationModalProps> = ({ op
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="bg-gray-900 text-gray-100 text-xs p-4 rounded-lg overflow-x-auto whitespace-pre-wrap max-h-64"
-          >{copiedText}</motion.pre>
+          >
+            {copiedText}
+          </motion.pre>
         )}
-        <p className="text-sm text-gray-600">You can now share or store this quest blueprint.</p>
+        <p className="text-sm text-gray-600">
+          You can now share or store this quest blueprint.
+        </p>
         <div className="flex justify-end">
           <button
             onClick={onClose}
             className="px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-medium shadow"
-          >Close</button>
+          >
+            Close
+          </button>
         </div>
       </div>
     </BaseModal>

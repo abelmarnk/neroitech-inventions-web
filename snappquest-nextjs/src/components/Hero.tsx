@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { FaPlusCircle, FaUsers } from 'react-icons/fa';
+import { motion } from "framer-motion";
+import { FaPlusCircle, FaUsers } from "react-icons/fa";
 
 export const Hero = () => (
   <section id="hero">
@@ -12,7 +12,11 @@ export const Hero = () => (
           <FaPlusCircle />
           <span>Create Quest</span>
         </a>
-        <a href="https://t.me/SnappQuest/134" className="action-icon" target="_blank">
+        <a
+          href="https://t.me/SnappQuest/134"
+          className="action-icon"
+          target="_blank"
+        >
           <FaUsers />
           <span>Join Quest</span>
         </a>

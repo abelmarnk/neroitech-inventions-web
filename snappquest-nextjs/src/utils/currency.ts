@@ -1,4 +1,4 @@
-export type Currency = 'NGN' | 'USDC';
+export type Currency = "NGN" | "USDC";
 
 interface CurrencyMeta {
   code: Currency;
@@ -9,17 +9,18 @@ interface CurrencyMeta {
 
 export const CURRENCIES: Record<Currency, CurrencyMeta> = {
   NGN: {
-    code: 'NGN',
-    symbol: '₦',
-    label: 'Naira (₦)',
+    code: "NGN",
+    symbol: "₦",
+    label: "Naira (₦)",
     format: (v: number) => `₦${v.toLocaleString()}`,
   },
   USDC: {
-    code: 'USDC',
-    symbol: '◉',
-    label: 'USDC',
+    code: "USDC",
+    symbol: "◉",
+    label: "USDC",
     format: (v: number) => `${v.toFixed(2)} USDC`,
   },
 };
 
-export const formatAmount = (value: number, currency: Currency) => CURRENCIES[currency].format(value);
+export const formatAmount = (value: number, currency: Currency) =>
+  CURRENCIES[currency].format(value);

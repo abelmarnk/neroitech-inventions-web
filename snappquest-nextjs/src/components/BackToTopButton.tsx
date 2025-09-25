@@ -1,14 +1,14 @@
 "use client";
-import { useEffect, useState } from 'react';
-import { FiArrowUp } from 'react-icons/fi';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState } from "react";
+import { FiArrowUp } from "react-icons/fi";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const BackToTopButton = () => {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 300);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
   return (
     <AnimatePresence>
@@ -20,8 +20,8 @@ export const BackToTopButton = () => {
           exit={{ opacity: 0, scale: 0.6, y: 40 }}
           whileHover={{ y: -6 }}
           whileTap={{ scale: 0.9 }}
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className={visible? 'visible' : ''}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className={visible ? "visible" : ""}
           aria-label="Back to top"
         >
           <FiArrowUp size={24} />

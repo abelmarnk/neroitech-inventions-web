@@ -10,7 +10,7 @@ export interface Quest {
   title: string;
   description: string;
   reward: number;
-  rewardCurrency: 'NGN' | 'USDC';
+  rewardCurrency: "NGN" | "USDC";
   createdAt: string; // ISO date
   tasks: Task[];
 }
