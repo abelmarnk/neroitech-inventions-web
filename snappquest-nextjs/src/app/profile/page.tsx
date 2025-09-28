@@ -179,8 +179,6 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen">
-      <Navbar variant="profile" />
-
       <div className="profile-container">
         <div className="profile-header">
           <div className="profile-avatar">{userData.name.charAt(0)}</div>
@@ -358,10 +356,6 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
-
-      <BackToTopButton />
-
-      <Footer />
 
       {/* Quest Completion Modal */}
       {completionModalOpen && (

@@ -1,9 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { HowItWorks } from "@/components/HowItWorks";
-import { Footer } from "@/components/Footer";
 import { BackToTopButton } from "@/components/BackToTopButton";
 import {
   LearnMoreModal,
@@ -42,13 +40,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      <Navbar />
-
       <Hero />
 
       <HowItWorks />
-
-      <Footer onLearnMoreClick={() => setLearnOpen(true)} />
 
       <BackToTopButton />
 

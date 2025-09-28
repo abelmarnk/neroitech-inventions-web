@@ -1,11 +1,7 @@
 import { FaTasks } from "react-icons/fa";
 import { FaTwitter, FaTelegram } from "react-icons/fa";
 
-interface FooterProps {
-  onLearnMoreClick?: () => void;
-}
-
-export const Footer: React.FC<FooterProps> = ({ onLearnMoreClick }) => (
+export const Footer: React.FC = () => (
   <footer>
     <div className="footer-container">
       <div className="footer-row">
@@ -33,15 +29,7 @@ export const Footer: React.FC<FooterProps> = ({ onLearnMoreClick }) => (
               </a>
             </li>
             <li>
-              <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onLearnMoreClick?.();
-                }}
-              >
-                How It Works
-              </a>
+              <a href="#how-it-works">How It Works</a>
             </li>
           </ul>
         </div>

@@ -1,33 +1,60 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletSelector } from "./wallet/WalletSelectorContext";
 import { FiMenu } from "react-icons/fi";
-
-const WalletMultiButtonDynamic: any = dynamic(
-  () =>
-    import("@solana/wallet-adapter-react-ui").then(
-      (m) => m.WalletMultiButton as any
-    ),
-  { ssr: false }
-);
+import { usePathname } from "next/navigation";
 
 interface NavbarProps {
   variant?: "home" | "profile";
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ variant = "home" }) => {
+export const Navbar: React.FC<NavbarProps> = ({ variant }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { publicKey } = useWallet();
+  const { publicKey, disconnect } = useWallet();
+  const { open } = useWalletSelector();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+  const pathname = usePathname();
+  const routeVariant = useMemo<"home" | "profile">(() => {
+    const p = pathname || "/";
+    return p.startsWith("/profile") ||
+      p.startsWith("/balance") ||
+      p.startsWith("/leaderboard")
+      ? "profile"
+      : "home";
+  }, [pathname]);
+  const effectiveVariant: "home" | "profile" = variant ?? routeVariant;
+  const isHome = effectiveVariant === "home";
 
-  const isHome = variant === "home";
+  // After connecting via the modal on the home page, redirect to profile
+  useEffect(() => {
+    if (publicKey && isHome) {
+      window.location.href = "/profile";
+    }
+  }, [publicKey, isHome]);
+
+  const Logout = async () => {
+    if (publicKey) {
+      // Call the disconnect function from the wallet adapter
+      await disconnect();
+      window.location.href = "/";
+    }
+  };
+
+  const Login = async () => {
+    if (publicKey) {
+      window.location.href = "/profile";
+      return;
+    }
+    // Open the custom wallet selector modal
+    open();
+  };
 
   return (
-    <header>
+    <header className="flex justify-between">
       <div className="logo">
         <Link href="/">
           <Image
@@ -38,23 +65,24 @@ export const Navbar: React.FC<NavbarProps> = ({ variant = "home" }) => {
           />
         </Link>
       </div>
-      <div className={`nav-container ${mobileOpen ? "active" : ""}`}>
+      <div className={`nav-container  ${mobileOpen ? "active" : ""}`}>
         <nav className="nav-links">
           {isHome ? (
             <>
-              <a href="#create-quest">Create Quest</a>
-              <a
+              <Link href="#create-quest">Create Quest</Link>
+              <Link
                 href="https://t.me/SnappQuest/134"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Join Quest
-              </a>
+              </Link>
             </>
           ) : (
             <>
-              <a href="#available-quests">Available Quests</a>
-              <a href="#completed-quests">Completed Quests</a>
+              <Link href="/profile">Profile</Link>
+              <Link href="/balance">View Balance</Link>
+              <Link href="/leaderboard">View Leaderboard</Link>
             </>
           )}
         </nav>
@@ -65,23 +93,20 @@ export const Navbar: React.FC<NavbarProps> = ({ variant = "home" }) => {
                 Profile
               </Link>
             ) : (
-              <button
-                className="disconnect-btn"
-                onClick={() => (window.location.href = "/")}
-              >
-                Disconnect
+              <button className="disconnect-btn" onClick={Logout}>
+                Disconnect Wallet
               </button>
             )
           ) : (
-            <Link
-              href="/profile"
+            <button
+              onClick={Login}
               className={isHome ? "connect-btn" : "disconnect-btn"}
             >
-              {isHome ? "Connect Wallet" : "Disconnect"}
-            </Link>
+              Connect Wallet
+            </button>
           ))}
       </div>
-      <div
+      {/* <div
         className={`hamburger ${mobileOpen ? "active" : ""}`}
         onClick={() => setMobileOpen((o) => !o)}
       >
@@ -90,7 +115,7 @@ export const Navbar: React.FC<NavbarProps> = ({ variant = "home" }) => {
       <div
         className={`overlay ${mobileOpen ? "active" : ""}`}
         onClick={() => setMobileOpen(false)}
-      />
+      /> */}
     </header>
   );
 };

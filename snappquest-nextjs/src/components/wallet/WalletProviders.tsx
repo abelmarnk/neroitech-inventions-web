@@ -5,14 +5,14 @@ import {
   WalletProvider,
 } from "@solana/wallet-adapter-react";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
-import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import {
   PhantomWalletAdapter,
   SolflareWalletAdapter,
-  TorusWalletAdapter,
   LedgerWalletAdapter,
+  TorusWalletAdapter,
   CoinbaseWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
+import { WalletSelectorProvider } from "./WalletSelectorContext";
 
 // require('@solana/wallet-adapter-react-ui/styles.css');
 
@@ -30,8 +30,8 @@ export const WalletProviders: React.FC<WalletProvidersProps> = ({
     const adapters = [
       new PhantomWalletAdapter(),
       new SolflareWalletAdapter({ network }),
-      new TorusWalletAdapter(),
       new LedgerWalletAdapter(),
+      new TorusWalletAdapter(),
       new CoinbaseWalletAdapter(),
     ];
     const seen = new Set<string>();
@@ -45,7 +45,7 @@ export const WalletProviders: React.FC<WalletProvidersProps> = ({
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
-        <WalletModalProvider>{children}</WalletModalProvider>
+        <WalletSelectorProvider>{children}</WalletSelectorProvider>
       </WalletProvider>
     </ConnectionProvider>
   );
