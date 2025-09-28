@@ -541,9 +541,28 @@
             });
         }
 
+        // Get the wallet type
+        function getProvider(wallet) {
+            switch (wallet) {
+                case "phantom":
+                    return window.phantom?.solana && window.phantom.solana.isPhantom
+                        ? window.phantom.solana
+                        : null;
+                case "solflare":
+                    return window.solflare && window.solflare.isSolflare
+                        ? window.solflare
+                        : null;
+                case "backpack":
+                    return window.backpack && window.backpack.isBackpack
+                        ? window.backpack
+                        : null;
+                default:
+                    return null;
+            }
+        }
+
         // Event listeners
         function setupEventListeners() {
-            DOM.disconnectBtn.addEventListener('click', () => window.location.href = 'index.html');
             DOM.hamburger.addEventListener('click', () => {
                 DOM.hamburger.classList.toggle('active');
                 DOM.navContainer.classList.toggle('active');
@@ -561,10 +580,34 @@
                 DOM.navContainer.classList.remove('active');
                 DOM.overlay.classList.remove('active');
             });
+            disconnectBtn.addEventListener("click", async () => {
+                if (!currentWallet) return;
+
+                const provider = getProvider(currentWallet);
+
+                try {
+                    await provider.disconnect?.();
+                    console.log(`Disconnected from ${currentWallet}`);
+
+                    // Clear localStorage
+                    localStorage.removeItem("walletPublicKey");
+                    localStorage.removeItem("walletName");
+
+                    // Redirect back to index
+                    window.location.href = "index.html";
+                } catch (err) {
+                    console.error("Wallet disconnect failed:", err);
+                }
+            });
         }
 
         // Initialize
         window.addEventListener('load', () => {
+            // If no is wallet connected, go back to index.html
+            if (!currentPublicKey || !currentWallet) {
+                window.location.href = "index.html";
+            }
+
             setupEventListeners();
             populateLeaderboard();
         });

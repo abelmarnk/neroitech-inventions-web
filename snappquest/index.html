@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -94,26 +94,108 @@
             transform: scale(0.95);
         }
 
+        /* Connect button*/
         .connect-btn {
-            background: linear-gradient(135deg, #6366F1, #34D399);
-            color: #ffffff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
+        background: linear-gradient(135deg, #6366F1, #34D399);
+        color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        margin: 0 0 0 16px;
+        width: auto;
         }
 
         .connect-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .connect-btn:active {
-            transform: scale(0.95);
+        transform: scale(0.95);
+        }
+
+
+        .wallet-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 999999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .wallet-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .wallet-modal-content {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            padding: 24px;
+            border-radius: 16px;
+            text-align: center;
+            width: 320px;
+            max-width: 90vw;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            
+            margin: 0;
+        }
+
+        .wallet-modal-content h2 {
+            margin-bottom: 20px;
+            font-size: 20px;
+            color: #f8fafc; 
+            margin-top: 0;
+            font-weight: 600;
+        }
+
+        /* Wallet buttons */
+        .wallet-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            margin: 10px 0;
+            padding: 14px 16px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            background: rgba(30, 41, 59, 0.5); 
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            font-size: 16px;
+            color: #e2e8f0; 
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .wallet-option img {
+            width: 28px; 
+            height: 28px;
+            object-fit: contain;
+            flex-shrink: 0; 
+        }
+
+        .wallet-option:hover {
+            background: rgba(51, 65, 85, 0.7);
+            border-color: rgba(148, 163, 184, 0.4);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         .hamburger {
@@ -1016,7 +1098,29 @@
                 <a href="#create-quest">Create Quest</a>
                 <a href="profile.html">Join Quest</a>
             </nav>
-            <button class="connect-btn" onclick="window.location.href='profile.html'">Connect Wallet</button>
+                <!-- Wallet connect button -->
+            <button class="connect-btn">Connect Wallet</button>
+            <!-- Wallet selection modal -->
+            <div id="walletModal" class="wallet-modal">
+                <div class="wallet-modal-content">
+                    <h2>Select Wallet</h2>
+
+                    <button class="wallet-option" data-wallet="phantom">
+                    <img src="images/phantom.png" alt="Phantom" />
+                    Phantom
+                    </button>
+
+                    <button class="wallet-option" data-wallet="solflare">
+                    <img src="images/solflare.png" alt="Solflare" />
+                    Solflare
+                    </button>
+
+                    <button class="wallet-option" data-wallet="backpack">
+                    <img src="images/backpack.png" alt="Backpack" />
+                    Backpack
+                    </button>
+                </div>
+            </div>
         </div>
         <div class="hamburger">
             <i class="fas fa-bars"></i>
@@ -1472,6 +1576,102 @@ Created on: ${new Date().toLocaleString('en-US', { timeZone: 'Africa/Lagos' })}
                 behavior: "smooth"
             });
         });
+
+        // Connect button + modal
+        const connectBtn = document.querySelector(".connect-btn");
+        const walletModal = document.getElementById("walletModal");
+        const walletOptions = document.querySelectorAll(".wallet-option");
+
+        function getProvider(wallet) {
+            switch (wallet) {
+                case "phantom":
+                    return window.phantom?.solana && window.phantom.solana.isPhantom
+                        ? window.phantom.solana
+                        : null;
+                case "solflare":
+                    return window.solflare && window.solflare.isSolflare
+                        ? window.solflare
+                        : null;
+                case "backpack":
+                    return window.backpack && window.backpack.isBackpack
+                        ? window.backpack
+                        : null;
+                default:
+                    return null;
+            }
+        }
+
+        function setDisconnectedState() {
+            connectBtn.textContent = "Connect Wallet";
+            connectBtn.classList.remove("connected");
+        }
+
+        let currentPublicKey = null;
+        let currentWallet = null;
+
+        // Show modal on connect button click (if not connected)
+        connectBtn.addEventListener("click", () => {
+            if (currentPublicKey) {
+                // Already connected → do nothing or optionally alert
+                alert("You are already connected. Go to your profile.");
+            } else {
+                walletModal.classList.add("show");
+            }
+        });
+
+        // Handle wallet selection
+        walletOptions.forEach(option => {
+            option.addEventListener("click", async () => {
+                const walletName = option.dataset.wallet;
+                const provider = getProvider(walletName);
+
+                if (!provider) {
+                    alert(`${walletName} wallet not found. Please install or enable it.`);
+                    return;
+                }
+
+                try {
+                    const resp = await provider.connect();
+                    currentPublicKey = resp.publicKey.toString();
+                    currentWallet = walletName;
+
+                    // Save state in localStorage
+                    localStorage.setItem("walletPublicKey", currentPublicKey);
+                    localStorage.setItem("walletName", currentWallet);
+
+                    // Redirect to profile.html
+                    window.location.href = "profile.html";
+                } catch (err) {
+                    console.error("Wallet connection failed:", err);
+                } finally {
+                    walletModal.classList.remove("show");
+                }
+            });
+        });
+
+        // Close modal when clicking outside
+        walletModal.addEventListener("click", (e) => {
+            if (e.target === walletModal) {
+                walletModal.classList.remove("show");
+            }
+        });
+
+        // External disconnect sync
+        ["phantom", "solflare", "backpack"].forEach(walletName => {
+            const provider = getProvider(walletName);
+            provider?.on?.("disconnect", () => {
+                console.log(`${walletName} disconnected externally`);
+                currentPublicKey = null;
+                currentWallet = null;
+                setDisconnectedState();
+                localStorage.removeItem("walletPublicKey");
+                localStorage.removeItem("walletName");
+            });
+        });
+
+        // Initial state
+        setDisconnectedState();
+
     </script>
 </body>
 
